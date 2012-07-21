@@ -42,7 +42,7 @@ http {
     location / {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
-        add_header Content-Type "text/javascript; charset=UTF-8";
+        add_header Content-Type application/x-javascript;
     }
   }
 
