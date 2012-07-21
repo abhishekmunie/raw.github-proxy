@@ -15,11 +15,25 @@ http {
 
   default_type  application/octet-stream;
 
-  # Nginx are cheap, so generally it's safe to increase it
   keepalive_timeout 20;
 
   tcp_nopush on; # off may be better for Comet/long-poll stuff
   tcp_nodelay off; # on may be better for Comet/long-poll stuff
+
+  server {
+    listen <%= ENV['PORT'] %>;
+
+    server_name js-raw.abhishekmunie.com;
+
+    charset utf-8;
+
+    location / {
+        proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
+        proxy_redirect off;
+        proxy_hide_header Content-Type;
+        more_set_headers 'Content-Type: text/javascript';
+    }
+  }
 
   server {
     listen <%= ENV['PORT'] %>;
