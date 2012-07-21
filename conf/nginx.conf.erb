@@ -20,6 +20,18 @@ http {
   tcp_nopush on; # off may be better for Comet/long-poll stuff
   tcp_nodelay off; # on may be better for Comet/long-poll stuff
 
+  proxy_hide_header Content-Type;
+  proxy_hide_header Content-Disposition;
+  proxy_hide_header X-Runtime;
+  proxy_hide_header Cache-Control;
+  proxy_hide_header Content-Transfer-Encoding;
+  proxy_hide_header X-Ratelimit-Limit;
+  proxy_hide_header X-RateLimit-Remaining;
+  proxy_hide_header X-Frame-Options;
+  add_header Cache-Control "public";
+  # opt-in to the future
+  add_header "X-UA-Compatible" "IE=Edge,chrome=1";
+
   server {
     listen <%= ENV['PORT'] %>;
 
@@ -30,8 +42,7 @@ http {
     location / {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
-        proxy_hide_header Content-Type;
-        add_header Content-Type text/javascript;
+        add_header Content-Type "text/javascript; charset=UTF-8";
     }
   }
 
@@ -45,7 +56,7 @@ http {
     location / {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
-        proxy_hide_header Content-Type;
+
     }
   }
 }
