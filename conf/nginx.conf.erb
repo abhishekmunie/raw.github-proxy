@@ -31,7 +31,7 @@ http {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
         proxy_hide_header Content-Type;
-        add_header 'Content-Type: text/javascript';
+        add_header Content-Type text/javascript;
     }
   }
 
