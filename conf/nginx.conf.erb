@@ -20,6 +20,7 @@ http {
   tcp_nopush on; # off may be better for Comet/long-poll stuff
   tcp_nodelay off; # on may be better for Comet/long-poll stuff
 
+  proxy_http_version 1.1;
   proxy_hide_header Content-Type;
   proxy_hide_header Content-Disposition;
   proxy_hide_header X-Runtime;
@@ -42,7 +43,7 @@ http {
     location / {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
-        add_header Content-Type application/x-javascript;
+        add_header Content-Type application/javascript;
     }
   }
 
@@ -54,7 +55,7 @@ http {
     charset utf-8;
 
     location / {
-        proxy_pass https://raw.github.com;
+        proxy_pass https://raw.github.com:443;
         proxy_redirect off;
 
     }
