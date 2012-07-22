@@ -37,12 +37,10 @@ http {
     server_name js-raw.abhishekmunie.com;
 
     charset utf-8;
-    default_type  text/html;
 
     location / {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
-        add_header Content-Type text/html
         add_header Content-Type application/javascript;
     }
   }
@@ -56,6 +54,7 @@ http {
     root html;
     
     charset utf-8;
+    default_type  text/html;
 
     location / {
         try_files $uri @proxy;
@@ -64,6 +63,7 @@ http {
     location @proxy {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
+        add_header Content-Type text/html;
         add_header Content-Type $content_type;
     }
   }
