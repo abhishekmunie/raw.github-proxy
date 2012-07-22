@@ -54,10 +54,15 @@ http {
 
     charset utf-8;
 
+    location = / {
+        sendfile on;
+        root html;
+    }
+
     location / {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
-
+        
     }
   }
 }
