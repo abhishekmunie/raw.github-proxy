@@ -13,8 +13,6 @@ events {
 http {
   include       mime.types;
 
-  default_type  application/octet-stream;
-
   keepalive_timeout 20;
 
   tcp_nopush on; # off may be better for Comet/long-poll stuff
@@ -39,10 +37,12 @@ http {
     server_name js-raw.abhishekmunie.com;
 
     charset utf-8;
+    default_type  text/html;
 
     location / {
         proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
         proxy_redirect off;
+        add_header Content-Type text/html
         add_header Content-Type application/javascript;
     }
   }
