@@ -64,7 +64,7 @@ http {
     location @proxy {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
-        
+        add_header Content-Type $content_type
     }
   }
 }
