@@ -243,6 +243,11 @@
 #endif
 
 
+#ifndef NGX_PCRE
+#define NGX_PCRE  1
+#endif
+
+
 #ifndef NGX_OPENSSL
 #define NGX_OPENSSL  1
 #endif

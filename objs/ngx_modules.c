@@ -11,6 +11,7 @@ extern ngx_module_t  ngx_events_module;
 extern ngx_module_t  ngx_event_core_module;
 extern ngx_module_t  ngx_kqueue_module;
 extern ngx_module_t  ngx_openssl_module;
+extern ngx_module_t  ngx_regex_module;
 extern ngx_module_t  ngx_http_module;
 extern ngx_module_t  ngx_http_core_module;
 extern ngx_module_t  ngx_http_log_module;
@@ -59,6 +60,7 @@ ngx_module_t *ngx_modules[] = {
     &ngx_event_core_module,
     &ngx_kqueue_module,
     &ngx_openssl_module,
+    &ngx_regex_module,
     &ngx_http_module,
     &ngx_http_core_module,
     &ngx_http_log_module,

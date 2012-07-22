@@ -9,6 +9,7 @@ ALL_INCS = -I src/core \
 	-I src/event \
 	-I src/event/modules \
 	-I src/os/unix \
+	-I ./pcre-8.30 \
 	-I objs \
 	-I src/http \
 	-I src/http/modules \
@@ -70,6 +71,8 @@ CORE_DEPS = src/core/nginx.h \
 	src/os/unix/ngx_darwin_config.h \
 	src/os/unix/ngx_darwin.h \
 	src/event/ngx_event_openssl.h \
+	src/core/ngx_regex.h \
+	./pcre-8.30/pcre.h \
 	objs/ngx_auto_config.h
 
 
@@ -77,6 +80,7 @@ CORE_INCS = -I src/core \
 	-I src/event \
 	-I src/event/modules \
 	-I src/os/unix \
+	-I ./pcre-8.30 \
 	-I objs
 
 
@@ -157,6 +161,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/event/modules/ngx_kqueue_module.o \
 	objs/src/os/unix/ngx_darwin_sendfile_chain.o \
 	objs/src/event/ngx_event_openssl.o \
+	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
 	objs/src/http/ngx_http_special_response.o \
@@ -205,7 +210,8 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_upstream_ip_hash_module.o \
 	objs/src/http/modules/ngx_http_upstream_least_conn_module.o \
 	objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
-	objs/ngx_modules.o
+	objs/ngx_modules.o \
+	./pcre-8.30/.libs/libpcre.a
 
 	$(LINK) -o objs/nginx \
 	objs/src/core/nginx.o \
@@ -267,6 +273,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/event/modules/ngx_kqueue_module.o \
 	objs/src/os/unix/ngx_darwin_sendfile_chain.o \
 	objs/src/event/ngx_event_openssl.o \
+	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
 	objs/src/http/ngx_http_special_response.o \
@@ -316,7 +323,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_upstream_least_conn_module.o \
 	objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
 	objs/ngx_modules.o \
-	-lssl -lcrypto -lz
+	./pcre-8.30/.libs/libpcre.a -lssl -lcrypto -lz
 	
 
 
@@ -740,6 +747,13 @@ objs/src/event/ngx_event_openssl.o:	$(CORE_DEPS) \
 		src/event/ngx_event_openssl.c
 
 
+objs/src/core/ngx_regex.o:	$(CORE_DEPS) \
+	src/core/ngx_regex.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) \
+		-o objs/src/core/ngx_regex.o \
+		src/core/ngx_regex.c
+
+
 objs/src/http/ngx_http.o:	$(CORE_DEPS) $(HTTP_DEPS) \
 	src/http/ngx_http.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
@@ -1074,6 +1088,19 @@ objs/src/http/modules/ngx_http_upstream_keepalive_module.o:	$(CORE_DEPS) $(HTTP_
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
 		-o objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
 		src/http/modules/ngx_http_upstream_keepalive_module.c
+
+
+./pcre-8.30/pcre.h:	./pcre-8.30/Makefile
+
+./pcre-8.30/Makefile:	objs/Makefile
+	cd ./pcre-8.30 \
+	&& if [ -f Makefile ]; then $(MAKE) distclean; fi \
+	&& CC="$(CC)" CFLAGS="-O2 -fomit-frame-pointer -pipe " \
+	./configure --disable-shared 
+
+./pcre-8.30/.libs/libpcre.a:	./pcre-8.30/Makefile
+	cd ./pcre-8.30 \
+	&& $(MAKE) libpcre.la
 
 
 manpage:	objs/nginx.8
