@@ -28,8 +28,6 @@ http {
   proxy_hide_header X-RateLimit-Remaining;
   proxy_hide_header X-Frame-Options;
   add_header Cache-Control "public";
-  # opt-in to the future
-  add_header "X-UA-Compatible" "IE=Edge,chrome=1";
 
   server {
     listen <%= ENV['PORT'] %>;
@@ -56,15 +54,64 @@ http {
     charset utf-8;
     default_type  text/html;
 
+    location = / {
+      try_files $uri @proxy;
+      add_header Content-Type text/html;
+    }
+
     location / {
-        try_files $uri @proxy;
+      try_files $uri @proxy;
+      add_header Content-Type $content_type;
+    }
+
+    location ~* \.(?:htm|html|shtml)$ {
+      try_files $uri @proxy;
+      add_header Content-Type text/html;
+    }
+
+    location ~* \.(?:css)$ {
+      try_files $uri @proxy;
+      add_header Content-Type text/css;
+    }
+
+    location ~* \.(?:js)$ {
+      try_files $uri @proxy;
+      add_header Content-Type application/x-javascript;
+    }
+
+    location ~* \.(?:gif)$ {
+      try_files $uri @proxy;
+      add_header Content-Type image/gif;
+    }
+
+    location ~* \.(?:jpeg|jpg)$ {
+      try_files $uri @proxy;
+      add_header Content-Type image/jpeg;
+    }
+
+    location ~* \.(?:png)$ {
+      try_files $uri @proxy;
+      add_header Content-Type image/png;
+    }
+
+    location ~* \.(?:ico)$ {
+      try_files $uri @proxy;
+      add_header Content-Type image/x-icon;
+    }
+
+    location ~* \.(?:pdf)$ {
+      try_files $uri @proxy;
+      add_header Content-Type application/pdf;
+    }
+
+    location ~* \.(?:rss)$ {
+      try_files $uri @proxy;
+      add_header Content-Type application/rss+xml;
     }
 
     location @proxy {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
-        add_header Content-Type text/html;
-        add_header Content-Type $content_type;
     }
   }
 }
