@@ -52,17 +52,19 @@ http {
 
     server_name github-raw.abhishekmunie.com github-raw-proxy.herokuapp.com;
 
+    sendfile on;
+    root html;
+    
     charset utf-8;
 
     location / {
+        try_files $uri @proxy;
+    }
+
+    location @proxy {
         proxy_pass https://raw.github.com;
         proxy_redirect off;
         
-    }
-
-    location = / {
-        sendfile on;
-        root html;
     }
   }
 }
