@@ -46,6 +46,8 @@ http {
   server {
     listen <%= ENV['PORT'] %>;
 
+    server_name github-raw.abhishekmunie.com github-raw-proxy.herokuapp.com;
+
     charset utf-8;
     default_type  text/html;
 
