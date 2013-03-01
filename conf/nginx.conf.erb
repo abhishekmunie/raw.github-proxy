@@ -37,7 +37,7 @@ http {
     charset utf-8;
 
     location / {
-        proxy_pass https://raw.github.com:443/mySite/mySite-js/master/;
+        proxy_pass https://raw.github.com:443/ASE-Inc/mySite-js/master/;
         proxy_redirect off;
         add_header Content-Type application/javascript;
     }
@@ -46,11 +46,6 @@ http {
   server {
     listen <%= ENV['PORT'] %>;
 
-    server_name github-raw.abhishekmunie.com github-raw-proxy.herokuapp.com;
-
-    sendfile on;
-    root html;
-    
     charset utf-8;
     default_type  text/html;
 
